@@ -62,4 +62,9 @@ public class UserController {
         return userService.approveUser(dto);
     }
 
+    @PutMapping("/refuse-user")
+    public ResponseEntity<String> refuseUser(@RequestBody EmailRequestDTO dto) {
+        return userService.refuseUser(dto);
+    }
+
 }
