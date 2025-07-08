@@ -54,8 +54,9 @@ public class UserService {
         if (optional.isPresent()) {
             PendingUser existing = optional.get();
 
-            if (existing.getStatus() == Status.PENDENTE || existing.getStatus() == Status.PENDENTE) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O email já existe.");
+            if (existing.getStatus() == Status.PENDENTE) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("O email já existe, está aguardando aprovação.");
             }
 
             if (existing.getStatus() == Status.RECUSADO) {
@@ -162,7 +163,7 @@ public class UserService {
         String email = dto.getEmail();
 
         PendingUser pendingUser = pendingUserRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Nenhum cadastro encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Nenhum cadastro encontrado com este email"));
 
         User newUser = new User();
         newUser.setName(pendingUser.getName());
@@ -174,5 +175,27 @@ public class UserService {
         pendingUserRepository.delete(pendingUser);
 
         return ResponseEntity.ok("Usuário aprovado com sucesso!");
+    }
+
+    public ResponseEntity<String> refuseUser(EmailRequestDTO dto) {
+        String email = dto.getEmail();
+
+        PendingUser pendingUser = pendingUserRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Nenhum cadastro encontrado com este email"));
+
+        int attempts = pendingUser.getRegistrationAttempts();
+
+        if (attempts >= 3) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Número máximo de tentativas de cadastro atingido.");
+        }
+
+        pendingUser.setStatus(Status.RECUSADO);
+        pendingUser.setRegistrationAttempts(attempts + 1);
+        pendingUserRepository.save(pendingUser); // Salvar as alterações
+
+        int tentativasRestantes = 4 - (attempts + 1);
+
+        return ResponseEntity.ok("Usuário recusado com sucesso. Tentativas restantes: " + tentativasRestantes);
     }
 }
