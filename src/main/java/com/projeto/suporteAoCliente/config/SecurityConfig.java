@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/create-user").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/approve-user").hasRole("MASTER")
+                        .requestMatchers(HttpMethod.PUT, "/users/refuse-user").hasRole("MASTER")
                         .requestMatchers(HttpMethod.POST, "/users")
                         .hasRole("MASTER").anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
