@@ -1,21 +1,21 @@
-# API Pagina de suporte
+# API - Página de Suporte
 
-# Introdução
+Esta API é responsável pelo gerenciamento de usuários, autenticação e mensagens trocadas na página de suporte técnico.
 
-- API destinada ao gerenciamento de usuários, autenticação e mensagens da página de suporte.
+## Endpoints
 
-# Endpoints
+### Auth
 
-## 1. Métodos GET
+- `POST /auth/login` – Realiza o login na API.
 
-- /users/all-user -> Lista todos os usuários ativos.
-- /users/all-user-pending -> Lista todos os cadastros pendentes e recusados.
+### Users
 
-## 2. Métodos POST
+- `GET /users` – Lista todos os usuários ativos.
+- `GET /users/pending` – Lista os cadastros pendentes e recusados.
+- `POST /users` – Cria um novo cadastro.
+- `POST /users/approve-user` – Aprova um novo cadastro.
+- `POST /users/refuse-user` – Recusa um novo cadastro.
 
-- /auth/login -> Rota de login para a API.
-- /users/create-user -> Rota para criar um cadastro.
-- /users/approve-user -> Rota para aprovar um novo cadastro.
-- /users/refuse-use -> Rota para o admin recusar um cadastro.
+## 🚧 Status
 
-### API EM CONSTRUÇÃO.
+API em construção. Novos recursos serão adicionados em breve.
