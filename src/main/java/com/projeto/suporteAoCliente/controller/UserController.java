@@ -21,18 +21,18 @@ public class UserController {
     private UserService userService;
 
     // Cadastrar usuário
-    @PostMapping("/create-user")
+    @PostMapping()
     public ResponseEntity<String> createUser(@RequestBody UserRequestDTO dto) {
         return userService.register(dto);
     }
 
     // Listar todos os usuários
-    @GetMapping("/all-user")
+    @GetMapping()
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
     }
 
-    @GetMapping("/all-user-pending")
+    @GetMapping("/pending")
     public ResponseEntity<List<UserResponseDTO>> getPendingOrRejectedUsers() {
         return ResponseEntity.ok(userService.findAllPendingOrRejected());
     }
